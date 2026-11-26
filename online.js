@@ -139,7 +139,7 @@ const originalOpen=open;open=async function(i){if(!db.session||db.admin){alert('
  if(openId===i&&P()&&!W().settled){let s=G(i);if(i===14&&!s.guesses)action('safe_init','',i);}}};
 // update shared data automatically only when no dialog/input is active.
 setInterval(()=>{if(db.session&&!pending&&!failed&&!loading&&openId===null&&$('#modal').hidden&&['board','ranking','roster','archive'].includes(tab))reload(false)},20000);
-(async()=>{loginScreen();if(!api)return;try{const {data,error}=await api.auth.getSession();if(error)throw error;if(data.session)await reload(false);}catch(e){loginScreen(e.message)}})();
+(async()=>{try{if(!api){loginScreen();return;}const {data,error}=await api.auth.getSession();if(error)throw error;if(data.session)await reload(false);else loginScreen();}catch(e){loginScreen(e.message);}finally{if(typeof window.cafeBootDone==='function')window.cafeBootDone();}})();
 
 // Handover: server consumes each attempt before revealing the sentence.
 async function handoverRpc(name,value){
